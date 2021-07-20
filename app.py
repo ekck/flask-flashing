@@ -1,17 +1,16 @@
-import functools
-from flask import Flask, render_template, flash
+from flask import Flask, render_template, redirect, url_for, flash, request
 
 app = Flask(__name__)
-app.secret_key = "jose"
+app.secret_key = b'secret'
 
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-@app.route("/")
-def home():
-    flash("This is a flashed message.")
-    flash("Another message.")
-    return render_template("home.html")
-
-
-@app.route("/profile")
-def profile():
-    return render_template("profile.html")
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        flash('You were successfully logged in', 'info')
+        return redirect(url_for('index'))
+    return render_template('login.html', error=error)
